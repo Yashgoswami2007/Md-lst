@@ -35,8 +35,11 @@ class Settings:
     SUPABASE_URL: str | None = os.getenv("SUPABASE_URL")
     SUPABASE_ANON_KEY: str | None = os.getenv("SUPABASE_ANON_KEY")
 
-    # Admin password for training endpoints
-    ADMIN_PASSWORD: str | None = os.getenv("ADMIN_PASSWORD")
+    # AWS Bedrock
+    AWS_ACCESS_KEY: str | None = os.getenv("AWS_ACCESS_KEY")
+    AWS_SECRET_KEY: str | None = os.getenv("AWS_SECRET_KEY")
+    AWS_REGION: str = os.getenv("AWS_REGION", "us-east-1")
+    BEDROCK_MODEL_ID: str = os.getenv("BEDROCK_MODEL_ID", "anthropic.claude-3-sonnet-20240229-v1:0")
 
     # CORS
     FRONTEND_URL: str = os.getenv("FRONTEND_URL", "http://localhost:3000")

@@ -1,7 +1,7 @@
 
 import React, { useRef, useState, useEffect } from 'react';
 import { Camera, Mic, Play, Square, Loader2, Sparkles, AlertCircle, RefreshCcw } from 'lucide-react';
-import { analyzeMultimodalMood } from '../services/geminiService';
+import { analyzeMultimodalMood } from '../services/bedrockService';
 import { MoodState, SupportMode } from '../types';
 
 interface MultimodalCaptureProps {
@@ -94,7 +94,7 @@ const MultimodalCapture: React.FC<MultimodalCaptureProps> = ({ conversationId, o
       recorder.ondataavailable = (e) => {
         if (e.data.size > 0) chunks.push(e.data);
       };
-      
+
       recorder.onstop = () => {
         const blob = new Blob(chunks, { type: mimeType });
         const reader = new FileReader();
@@ -132,7 +132,7 @@ const MultimodalCapture: React.FC<MultimodalCaptureProps> = ({ conversationId, o
     try {
       // Ensure history is correctly formatted for Gemini parts
       const formattedHistory = history.map(h => ({ role: h.role, content: h.content }));
-      
+
       const data = await analyzeMultimodalMood(
         undefined, // no text input in this step
         capturedImageBase64 || undefined,
@@ -155,7 +155,7 @@ const MultimodalCapture: React.FC<MultimodalCaptureProps> = ({ conversationId, o
         {/* Camera Section */}
         <div className="relative bg-gray-950 dark:bg-black rounded-3xl overflow-hidden flex items-center justify-center min-h-[250px] border-4 border-gray-100 dark:border-slate-800 shadow-inner group transition-all">
           {!isCameraActive && !capturedImageBase64 && (
-            <button 
+            <button
               onClick={startCamera}
               className="flex flex-col items-center gap-4 text-white hover:scale-105 transition-transform active:scale-95"
             >
@@ -165,18 +165,18 @@ const MultimodalCapture: React.FC<MultimodalCaptureProps> = ({ conversationId, o
               <span className="font-bold text-sm uppercase tracking-widest opacity-80">Enable Camera</span>
             </button>
           )}
-          
+
           {isCameraActive && (
             <>
-              <video 
-                ref={videoRef} 
-                autoPlay 
+              <video
+                ref={videoRef}
+                autoPlay
                 playsInline
-                muted 
+                muted
                 className="w-full h-full object-cover"
               />
               <div className="absolute inset-0 border-[20px] border-white/10 pointer-events-none rounded-3xl" />
-              <button 
+              <button
                 onClick={captureFrame}
                 className="absolute bottom-6 left-1/2 -translate-x-1/2 p-5 bg-white text-indigo-600 rounded-full shadow-2xl transition-all hover:scale-110 active:scale-90"
               >
@@ -187,12 +187,12 @@ const MultimodalCapture: React.FC<MultimodalCaptureProps> = ({ conversationId, o
 
           {capturedImageBase64 && (
             <>
-              <img 
-                src={`data:image/jpeg;base64,${capturedImageBase64}`} 
+              <img
+                src={`data:image/jpeg;base64,${capturedImageBase64}`}
                 className="w-full h-full object-cover animate-in fade-in zoom-in"
                 alt="Captured"
               />
-              <button 
+              <button
                 onClick={() => { setCapturedImageBase64(null); startCamera(); }}
                 className="absolute top-4 right-4 px-4 py-2 bg-black/60 backdrop-blur-md text-white rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-black/80 transition-all flex items-center gap-2"
               >
@@ -205,23 +205,23 @@ const MultimodalCapture: React.FC<MultimodalCaptureProps> = ({ conversationId, o
         {/* Audio Section */}
         <div className="bg-indigo-50 dark:bg-slate-800/50 rounded-3xl p-8 flex flex-col items-center justify-center border-4 border-indigo-100 dark:border-slate-700 shadow-sm relative group">
           <div className="absolute top-0 left-0 w-full h-1.5 bg-indigo-100 dark:bg-slate-700 overflow-hidden">
-             {isRecording && <div className="h-full bg-indigo-600 animate-[progress_2s_linear_infinite]" />}
+            {isRecording && <div className="h-full bg-indigo-600 animate-[progress_2s_linear_infinite]" />}
           </div>
-          
+
           <div className={`p-8 rounded-[2rem] transition-all duration-500 shadow-lg ${isRecording ? 'bg-red-500 text-white scale-110 rotate-3' : 'bg-white dark:bg-slate-800 text-indigo-600 dark:text-indigo-400'}`}>
             <Mic size={52} className={isRecording ? 'animate-pulse' : ''} />
           </div>
-          
+
           <h3 className="mt-8 font-black text-indigo-900 dark:text-indigo-100 tracking-tight text-center">
             {isRecording ? "Analyzing tone..." : audioBase64 ? "Vocal pattern captured" : "Record Voice Note"}
           </h3>
           <p className="text-indigo-400 dark:text-slate-500 text-[11px] font-bold uppercase tracking-widest mt-1">
-             {isRecording ? "Listening" : audioBase64 ? "Voice ready" : "Share how you feel"}
+            {isRecording ? "Listening" : audioBase64 ? "Voice ready" : "Share how you feel"}
           </p>
-          
+
           <div className="mt-8 flex gap-4">
             {!isRecording ? (
-              <button 
+              <button
                 onClick={startRecording}
                 className="flex items-center gap-3 px-8 py-4 bg-white dark:bg-slate-700 text-indigo-600 dark:text-indigo-400 rounded-2xl font-black text-sm shadow-md hover:shadow-xl transition-all active:scale-95 border border-indigo-100 dark:border-slate-600"
               >
@@ -229,7 +229,7 @@ const MultimodalCapture: React.FC<MultimodalCaptureProps> = ({ conversationId, o
                 {audioBase64 ? "Record Again" : "Start Mic"}
               </button>
             ) : (
-              <button 
+              <button
                 onClick={stopRecording}
                 className="flex items-center gap-3 px-8 py-4 bg-red-600 text-white rounded-2xl font-black text-sm shadow-xl shadow-red-100 animate-pulse"
               >

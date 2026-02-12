@@ -15,7 +15,7 @@
         <mxCell id="4" value="MultimodalCapture.tsx" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;fontColor=#333333;strokeColor=#666666;" vertex="1" parent="2">
           <mxGeometry x="70" y="140" width="160" height="40" as="geometry" />
         </mxCell>
-        <mxCell id="5" value="geminiService.ts" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;fontColor=#333333;strokeColor=#666666;" vertex="1" parent="2">
+        <mxCell id="5" value="bedrockService.ts" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;" vertex="1" parent="2">
           <mxGeometry x="70" y="240" width="160" height="40" as="geometry" />
         </mxCell>
         <mxCell id="6" value="cloudService / API Utils" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;fontColor=#333333;strokeColor=#666666;" vertex="1" parent="2">
@@ -32,10 +32,10 @@
         <mxCell id="9" value="Pipeline / Fusion" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;fontColor=#333333;strokeColor=#666666;" vertex="1" parent="7">
           <mxGeometry x="70" y="140" width="160" height="40" as="geometry" />
         </mxCell>
-        <mxCell id="10" value="Emotion Services&#xa;(Text/Face/Voice)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;fontColor=#333333;strokeColor=#666666;" vertex="1" parent="7">
+        <mxCell id="10" value="Emotion Services&#xa;(Bedrock Logic)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;fontColor=#333333;strokeColor=#666666;" vertex="1" parent="7">
           <mxGeometry x="70" y="240" width="160" height="60" as="geometry" />
         </mxCell>
-        <mxCell id="11" value="LLM Client (Groq/Admin)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;fontColor=#333333;strokeColor=#666666;" vertex="1" parent="7">
+        <mxCell id="11" value="AWS Bedrock Client&#xa;(Boto3)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="7">
           <mxGeometry x="70" y="330" width="160" height="40" as="geometry" />
         </mxCell>
 
@@ -48,14 +48,11 @@
         </mxCell>
 
         <!-- External Services -->
-        <mxCell id="14" value="EXTERNAL AI SERVICES" style="swimlane;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;fontStyle=1" vertex="1" parent="1">
+        <mxCell id="14" value="EXTERNAL AWS SERVICES" style="swimlane;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;fontStyle=1" vertex="1" parent="1">
           <mxGeometry x="40" y="520" width="700" height="150" as="geometry" />
         </mxCell>
-        <mxCell id="15" value="Google Gemini API&#xa;(1.5 Flash)" style="ellipse;whiteSpace=wrap;html=1;fillColor=#f5f5f5;fontColor=#333333;strokeColor=#666666;" vertex="1" parent="14">
-          <mxGeometry x="60" y="60" width="140" height="60" as="geometry" />
-        </mxCell>
-        <mxCell id="16" value="Groq / OpenRouter" style="ellipse;whiteSpace=wrap;html=1;fillColor=#f5f5f5;fontColor=#333333;strokeColor=#666666;" vertex="1" parent="14">
-          <mxGeometry x="470" y="60" width="140" height="60" as="geometry" />
+        <mxCell id="15" value="Amazon Bedrock" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffcc99;strokeColor=#36393d;fontStyle=1" vertex="1" parent="14">
+          <mxGeometry x="280" y="60" width="140" height="60" as="geometry" />
         </mxCell>
 
         <!-- Connections -->
@@ -65,9 +62,12 @@
           </mxGeometry>
         </mxCell>
         <mxCell id="18" value="Direct Multimodal Analysis" style="endArrow=classic;startArrow=classic;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.25;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="5" target="15">
-          <mxGeometry width="50" height="50" relative="1" as="geometry" />
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="120" y="280" as="sourcePoint" />
+            <mxPoint x="320" y="520" as="targetPoint" />
+          </mxGeometry>
         </mxCell>
-        <mxCell id="19" value="LLM Queries" style="endArrow=classic;startArrow=classic;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.75;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="11" target="16">
+        <mxCell id="19" value="AI Queries" style="endArrow=classic;startArrow=classic;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.75;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="11" target="15">
           <mxGeometry width="50" height="50" relative="1" as="geometry" />
         </mxCell>
         <mxCell id="20" value="Data Persistence" style="endArrow=classic;startArrow=classic;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;entryPerimeter=0;" edge="1" parent="1" source="7" target="13">

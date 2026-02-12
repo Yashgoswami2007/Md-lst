@@ -3,8 +3,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { Send, Camera, Mic, Sparkles, Loader2, MicOff, X, History, Plus, MessageSquare, Menu, ChevronLeft } from 'lucide-react';
 import { Message, MoodState, SupportMode, Conversation } from '../types';
 import MultimodalCapture from './MultimodalCapture';
-import { analyzeMultimodalMood, analyzeVoiceOnly } from '../services/geminiService';
-import { callOpenRouter } from '../services/openRouterService';
+import { analyzeMultimodalMood, analyzeVoiceOnly } from '../services/bedrockService';
 import { cloudService } from '../services/cloudService';
 
 interface ChatWindowProps {
@@ -103,35 +102,16 @@ const ChatWindow: React.FC<ChatWindowProps> = ({ currentMood, onMoodDetected }) 
     }
 
     try {
-      let data;
+      console.log("[ChatWindow] Sending message to Bedrock via Backend:", textToSend);
 
-      console.log("[ChatWindow] Sending message:", textToSend);
-      console.log("[ChatWindow] Active conversation:", activeConvId);
+      const data = await analyzeMultimodalMood(
+        textToSend,
+        undefined,
+        undefined,
+        messages.slice(-5).map(m => ({ role: m.role, content: m.content }))
+      );
 
-      try {
-        console.log("[ChatWindow] Attempting Gemini analysis...");
-        data = await analyzeMultimodalMood(
-          textToSend,
-          undefined,
-          undefined,
-          messages.slice(-5).map(m => ({ role: m.role, content: m.content }))
-        );
-        console.log("[ChatWindow] Gemini response received:", data);
-      } catch (geminiError) {
-        console.warn("Gemini Analysis Failed, switching to OpenRouter:", geminiError);
-        console.log("[ChatWindow] Attempting OpenRouter fallback...");
-
-        // Fallback to OpenRouter
-        const openRouterHistory = messages.slice(-5).map(m => ({
-          role: m.role as 'user' | 'assistant' | 'system',
-          content: m.content
-        }));
-        // Add current user message
-        openRouterHistory.push({ role: 'user', content: textToSend });
-
-        data = await callOpenRouter(openRouterHistory);
-        console.log("[ChatWindow] OpenRouter response received:", data);
-      }
+      console.log("[ChatWindow] Bedrock response received:", data);
 
       if (!data || !data.response) {
         throw new Error("No response received from AI");

@@ -1,41 +1,41 @@
 # MoodDoctor Design Document
 
-MoodDoctor is an emotionally intelligent support companion that uses multi-modal sentiment analysis to provide wellness guidance and emotional support.
+MoodDoctor is an emotionally intelligent support companion that uses multi-modal sentiment analysis to provide wellness guidance and emotional support, built for the **AI for Bharat** hackathon.
 
 ## Architecture Overview
 
-The system follows a modern client-server architecture:
+The system follows a modern client-server architecture optimized for AWS:
 
 - **Frontend**: A React-based SPA (Single Page Application) that handles the user interface, real-time audio/video capture, and interactive chat.
-- **Backend**: A FastAPI server that provides RESTful endpoints, manages authentication, integrates with AI services, and handles data persistence.
-- **Database**: MongoDB for storing user data, session archives, and safety plans. Supabase is also used for specific cloud-related features or as an alternative auth/data layer.
+- **Backend**: A FastAPI server that provides RESTful endpoints, manages authentication, and orchestrates AWS services.
+- **Database**: MongoDB for storing user data, session archives, and safety plans.
 - **AI Integration**:
-    - **Google Gemini**: Primary driver for multi-modal emotion detection (text, image, audio) and conversational intelligence.
-    - **Groq/OpenRouter**: Fallback or specialized LLMs for faster or alternative response generation.
+    - **Amazon Bedrock**: The core AI engine providing multi-modal emotion detection (via models like Claude 3 / Llama 3) and conversational intelligence.
+    - **AWS SDK (Boto3)**: Used for seamless integration with Bedrock and other AWS services.
 
 ## Technology Stack
 
 ### Frontend
 - **Framework**: React 19 (Vite)
 - **Language**: TypeScript
-- **Styling**: Vanilla CSS (based on modular structure) / Tailwind-like utilities
+- **Styling**: Vanilla CSS / Tailwind-like utilities
 - **Icons**: Lucide React
-- **Visuals**: Recharts (for mood tracking analytics)
-- **Networking**: native Fetch API with modular service wrappers
+- **Visuals**: Recharts
+- **Networking**: native Fetch API and AWS SDK (where applicable)
 
 ### Backend
 - **Framework**: FastAPI
 - **Language**: Python 3.12+
-- **Database Driver**: Motor (Asynchronous MongoDB)
 - **Security**: JWT (Python-Jose), Passlib (Bcrypt)
-- **AI SDKs**: `google-generativeai`, `groq`
+- **AI Layer**: **Amazon Bedrock** (Amazon Web Services)
+- **SDK**: `boto3` (AWS SDK for Python)
 
 ## Key Features
 
 ### 1. Multi-modal Sentiment Analysis
 Detects emotional states by combining inputs from:
-- **Text Analysis**: Natural language understanding of user messages.
-- **Facial Expression Analysis**: Processing image frames captured via webcam.
+- **Text Analysis**: Natural language understanding using Amazon Bedrock.
+- **Facial Expression Analysis**: Processing image frames via Bedrock multimodal models.
 - **Voice Tone Analysis**: Analyzing audio recordings for pitch and energy.
 
 ### 2. Emotionally Adaptive Support
@@ -50,7 +50,7 @@ MoodDoctor adjusts its "Support Mode" based on the detected mood:
 A secure environment for real-time interaction with the AI, featuring:
 - **Session Archiving**: Encrypted storage of past conversations.
 - **Biometric Sync**: Visual feedback of detected emotional states during chat.
-- **Streaming Responses**: Real-time response generation for a fluid experience.
+- **Streaming Responses**: Real-time response generation powered by Amazon Bedrock.
 
 ### 4. Safety Planning
 Built-in features for users to document and access their personal safety plans during periods of high distress.
@@ -58,12 +58,12 @@ Built-in features for users to document and access their personal safety plans d
 ## Data Flow
 
 1.  **Capture**: User provides text, records audio, or scans their face in the `MultimodalCapture` component.
-2.  **Processing**: The `geminiService` (or backend pipeline) sends the data to Gemini 1.5 Flash.
-3.  **Synthesis**: The model returns the `mood_state`, recommended `support_mode`, and a therapeutic response.
+2.  **Processing**: Data is sent to the backend, which invokes the **Amazon Bedrock** API.
+3.  **Synthesis**: Bedrock models (Claude 3 / Llama 3) return the `mood_state`, recommended `support_mode`, and a therapeutic response.
 4.  **Action**: The UI updates the background/mood indicator and the AI responds in the `ChatWindow`.
 5.  **Persistence**: Messages and mood data are saved to MongoDB for future reference and dashboard analytics.
 
 ## Security & Privacy
 - **Authentication**: JWT-based secure login.
+- **Infrastructure**: Powered by AWS secure cloud infrastructure.
 - **Data Privacy**: Conversations are stored securely; AI prompts focus on wellness without clinical diagnosis.
-- **Guest Access**: Option to use core features without full registration.
